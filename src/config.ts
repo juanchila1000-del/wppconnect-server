@@ -12,7 +12,7 @@ export default {
   customUserDataDir: './userDataDir/',
   webhook: {
     url: 'https://juanchila.app.n8n.cloud/webhook/whatsapp-cecilia',
-    autoDownload: true,
+    autoDownload: false,
     uploadS3: false,
     readMessage: true,
     allUnreadOnStart: false,
