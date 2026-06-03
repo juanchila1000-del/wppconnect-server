@@ -265,7 +265,7 @@ setInterval(async () => {
     await client.getConnectionState();
 
     req.logger.info(`POLLING unread ${client.session}`);
-    await sendUnread(client, req);
+    await this.sendUnread(client, req);
   } catch (e) {
     req.logger.error(e);
   }
