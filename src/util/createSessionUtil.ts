@@ -259,21 +259,23 @@ export default class CreateSessionUtil {
 
     await this.checkStateSession(client, req);
     await this.listenMessages(client, req);
-let lastPollingIds = new Set();
+let lastPollingIds = new Set<any>();
 
 setInterval(async () => {
   try {
     req.logger.info(`KEEPALIVE ${client.session}`);
     await client.getConnectionState();
 
-    const chats = await client.getAllChatsWithMessages(true);
+    const chats: any = await client.getAllChatsWithMessages(true);
 
     for (const chat of chats || []) {
       for (const msg of chat.msgs || []) {
-        if (!msg.fromMe && !lastPollingIds.has(msg.id)) {
-          lastPollingIds.add(msg.id);
-          req.logger.info(`POLLING MESSAGE ${msg.body || msg.type}`);
-          callWebHook(client, req, 'onmessage', msg);
+        const message: any = msg;
+
+        if (!message.fromMe && !lastPollingIds.has(message.id)) {
+          lastPollingIds.add(message.id);
+          req.logger.info(`POLLING MESSAGE ${message.body || message.type}`);
+          callWebHook(client, req, 'onmessage', message);
         }
       }
     }
