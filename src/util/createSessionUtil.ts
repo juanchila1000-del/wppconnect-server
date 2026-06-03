@@ -259,7 +259,10 @@ export default class CreateSessionUtil {
 
     await this.checkStateSession(client, req);
     await this.listenMessages(client, req);
-
+setInterval(() => {
+  req.logger.info(`KEEPALIVE ${client.session}`);
+  client.getConnectionState().catch(() => {});
+}, 30000);
     if (req.serverOptions.webhook.listenAcks) {
       await this.listenAcks(client, req);
     }
