@@ -259,18 +259,9 @@ export default class CreateSessionUtil {
 
     await this.checkStateSession(client, req);
     await this.listenMessages(client, req);
-let lastPollingIds = new Set<any>();
-
-setInterval(async () => {
-  try {
-    req.logger.info(`KEEPALIVE ${client.session}`);
-    
-
-    const chats: any = await client.getAllChatsWithMessages(true);
-
-    for (const chat of chats || []) {
-      for (const msg of chat.msgs || []) {
-        const message: any = msg;
+setInterval(() => {
+  req.logger.info(`KEEPALIVE ${client.session}`);
+}, 30000);
 
         if (!message.fromMe && !lastPollingIds.has(message.id)) {
           lastPollingIds.add(message.id);
