@@ -292,7 +292,10 @@ export default class CreateSessionUtil {
 
     await client.onAnyMessage(async (message: any) => {
       message.session = client.session;
-
+    if (!message.fromMe) {
+  req.logger.info(`ONANYMESSAGE recibido: ${message.body || message.type}`);
+  callWebHook(client, req, 'onmessage', message);
+}
       if (message.type === 'sticker') {
         download(message, client, req.logger);
       }
