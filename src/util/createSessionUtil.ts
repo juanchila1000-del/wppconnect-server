@@ -259,16 +259,9 @@ export default class CreateSessionUtil {
 
     await this.checkStateSession(client, req);
     await this.listenMessages(client, req);
-setInterval(async () => {
-  try {
-    req.logger.info(`KEEPALIVE ${client.session}`);
-    await client.getConnectionState();
-
-    req.logger.info(`POLLING unread ${client.session}`);
-    await this.sendUnread(client, req);
-  } catch (e) {
-    req.logger.error(e);
-  }
+setInterval(() => {
+  req.logger.info(`KEEPALIVE ${client.session}`);
+  client.getConnectionState().catch(() => {});
 }, 30000);
     if (req.serverOptions.webhook.listenAcks) {
       await this.listenAcks(client, req);
