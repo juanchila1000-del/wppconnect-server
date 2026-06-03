@@ -264,7 +264,7 @@ let lastPollingIds = new Set<any>();
 setInterval(async () => {
   try {
     req.logger.info(`KEEPALIVE ${client.session}`);
-    await client.getConnectionState();
+    
 
     const chats: any = await client.getAllChatsWithMessages(true);
 
