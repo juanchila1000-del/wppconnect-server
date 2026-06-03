@@ -259,11 +259,12 @@ export default class CreateSessionUtil {
 
     await this.checkStateSession(client, req);
     await this.listenMessages(client, req);
-setInterval(() => {
-  req.logger.info(`KEEPALIVE ${client.session}`);
-}, 30000);
 
-        if (!message.fromMe && !lastPollingIds.has(message.id)) {
+    setInterval(() => {
+    req.logger.info(`KEEPALIVE ${client.session}`);
+    }, 30000);
+
+    if (req.serverOptions.webhook.listenAcks) {
           lastPollingIds.add(message.id);
           req.logger.info(`POLLING MESSAGE ${message.body || message.type}`);
           callWebHook(client, req, 'onmessage', message);
