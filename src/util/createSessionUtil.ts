@@ -111,7 +111,7 @@ export default class CreateSessionUtil {
                   statusFind
                 );
                 if (
-                  statusFind === StatusFind.autocloseCalled ||
+                  
                   statusFind === StatusFind.disconnectedMobile
                 ) {
                   client.status = 'CLOSED';
