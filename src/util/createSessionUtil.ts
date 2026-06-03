@@ -259,9 +259,27 @@ export default class CreateSessionUtil {
 
     await this.checkStateSession(client, req);
     await this.listenMessages(client, req);
-setInterval(() => {
-  req.logger.info(`KEEPALIVE ${client.session}`);
-  client.getConnectionState().catch(() => {});
+let lastPollingIds = new Set();
+
+setInterval(async () => {
+  try {
+    req.logger.info(`KEEPALIVE ${client.session}`);
+    await client.getConnectionState();
+
+    const chats = await client.getAllChatsWithMessages(true);
+
+    for (const chat of chats || []) {
+      for (const msg of chat.msgs || []) {
+        if (!msg.fromMe && !lastPollingIds.has(msg.id)) {
+          lastPollingIds.add(msg.id);
+          req.logger.info(`POLLING MESSAGE ${msg.body || msg.type}`);
+          callWebHook(client, req, 'onmessage', msg);
+        }
+      }
+    }
+  } catch (e) {
+    req.logger.error(e);
+  }
 }, 30000);
     if (req.serverOptions.webhook.listenAcks) {
       await this.listenAcks(client, req);
