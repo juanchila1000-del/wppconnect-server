@@ -263,18 +263,7 @@ export default class CreateSessionUtil {
     setInterval(() => {
     req.logger.info(`KEEPALIVE ${client.session}`);
     }, 30000);
-
-    if (req.serverOptions.webhook.listenAcks) {
-          lastPollingIds.add(message.id);
-          req.logger.info(`POLLING MESSAGE ${message.body || message.type}`);
-          callWebHook(client, req, 'onmessage', message);
-        }
-      }
-    }
-  } catch (e) {
-    req.logger.error(e);
-  }
-}, 30000);
+    
     if (req.serverOptions.webhook.listenAcks) {
       await this.listenAcks(client, req);
     }
