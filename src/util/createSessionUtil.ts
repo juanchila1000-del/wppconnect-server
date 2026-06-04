@@ -290,28 +290,7 @@ export default class CreateSessionUtil {
         });
     });
 
-    await client.onAnyMessage(async (message: any) => {
-      message.session = client.session;
-    if (!message.fromMe) {
-  req.logger.info(`ONANYMESSAGE recibido: ${message.body || message.type}`);
-  callWebHook(client, req, 'onmessage', message);
-}
-      if (message.type === 'sticker') {
-        download(message, client, req.logger);
-      }
-
-      if (
-        req.serverOptions?.websocket?.autoDownload ||
-        (req.serverOptions?.webhook?.autoDownload && message.fromMe == false)
-      ) {
-        await autoDownload(client, req, message);
-      }
-
-      req.io.emit('received-message', { response: message });
-      if (req.serverOptions.webhook.onSelfMessage && message.fromMe)
-        callWebHook(client, req, 'onselfmessage', message);
-    });
-
+    
     await client.onIncomingCall(async (call) => {
       req.io.emit('incomingcall', call);
       callWebHook(client, req, 'incomingcall', call);
