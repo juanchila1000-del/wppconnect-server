@@ -111,7 +111,7 @@ export default class CreateSessionUtil {
                   statusFind
                 );
                 if (
-                  
+                  statusFind === StatusFind.autocloseCalled ||
                   statusFind === StatusFind.disconnectedMobile
                 ) {
                   client.status = 'CLOSED';
@@ -260,8 +260,6 @@ export default class CreateSessionUtil {
     await this.checkStateSession(client, req);
     await this.listenMessages(client, req);
 
-   
-    
     if (req.serverOptions.webhook.listenAcks) {
       await this.listenAcks(client, req);
     }
